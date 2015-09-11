@@ -18,6 +18,18 @@ def init(token):
 def get_users():
     return json.loads(api_client.api_call('users.list'))['members']
 
+def get_users_first_name(user_id):
+    """
+    Return the first name of the user with user_id
+    :param user_id: slack user id
+    :return: The user's first name, otherwise blank string if id can't be found
+    """
+    l = get_users()
+    user = [u for u in l if u['id'] == user_id]
+    if user:
+        return user[0]['profile']['first_name']
+    return ''
+
 # get_presence returns if a certain user is active or not in chat
 def get_presence(id):
     return json.loads(api_client.api_call('users.getPresence', user=id))
