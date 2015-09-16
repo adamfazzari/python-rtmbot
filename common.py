@@ -1,6 +1,20 @@
 import re
+from client import send_message
 
 MY_NAME = 'stacey'
+
+outputs = []
+
+def help_message(channel, command, help):
+    """
+    Post a formatted help message to the given channel
+    :param channel: channel to post into
+    :param command: command pattern
+    :param help: descriptive text
+    :return:
+    """
+    if help:
+        send_message(channel, " - ".join([command, help]))
 
 def disabled(func):
     """
@@ -13,20 +27,24 @@ def disabled(func):
 
     return func_wrapper
 
-def command(command):
+def command(command, help=None):
     def _command(func):
         """
         Returns the function if the bot's name was mentioned at the start of the message followed by the specified command
         :param func:
-        :return: The message text with the salutation removed
+        :return: Calls the command function with the salutation removed from the text
         """
         def func_wrapper(message):
-            if message['text'].lower().startswith(' '.join([MY_NAME, 'help'])):
-                msg = dict(message)
-                msg['text'] = re.sub("^{}".format(MY_NAME), '', msg['text']).strip()
-                msg['text'] = 'help'
-                func(msg)
-            elif message['text'].lower().startswith(' '.join([MY_NAME, command])):
+            cmd_pattern = "^{}.*".format(' '.join([MY_NAME, command.lower()]))
+            help_pattern = "^{}.*".format(' '.join([MY_NAME,'help']))
+
+            result = re.search(help_pattern, message['text'].lower())
+            if result:
+                help_message(message['channel'], command, help)
+                return
+
+            result = re.search(cmd_pattern, message['text'].lower())
+            if result:
                 msg = dict(message)
                 msg['text'] = re.sub("^{}".format(MY_NAME), '', msg['text']).strip()
                 func(msg)

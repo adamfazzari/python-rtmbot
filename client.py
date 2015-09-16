@@ -33,3 +33,12 @@ def get_users_first_name(user_id):
 # get_presence returns if a certain user is active or not in chat
 def get_presence(id):
     return json.loads(api_client.api_call('users.getPresence', user=id))
+
+def send_message(channel, message):
+    """
+    Post a message to a specific channel as the bot user
+    :param channel: channel id or name
+    :param message: message to post
+    :return:
+    """
+    api_client.rtm_send_message(channel, message)
