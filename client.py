@@ -12,7 +12,8 @@ def init(token):
     return api_client
 
 
-# example functions
+def slack_token():
+    return api_client.token
 
 # get_users() returns a list of users in a Slack organization
 def get_users():

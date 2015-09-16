@@ -12,6 +12,7 @@ import time
 import logging
 from argparse import ArgumentParser
 import client
+import command
 
 def dbg(debug_string):
     if debug:
@@ -186,6 +187,8 @@ if __name__ == "__main__":
     config = yaml.load(file(args.config or 'rtmbot.conf', 'r'))
     debug = config["DEBUG"]
     api_client = client.init(config["SLACK_TOKEN"])
+    command.my_name = config['MY_NAME']
+
     bot = RtmBot(api_client)
     site_plugins = []
     files_currently_downloading = []

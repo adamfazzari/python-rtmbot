@@ -1,7 +1,7 @@
 import re
 from client import send_message
 
-MY_NAME = 'stacey'
+my_name = 'bot'
 
 outputs = []
 
@@ -35,8 +35,8 @@ def command(command, help=None):
         :return: Calls the command function with the salutation removed from the text
         """
         def func_wrapper(message):
-            cmd_pattern = "^{}.*".format(' '.join([MY_NAME, command.lower()]))
-            help_pattern = "^{}.*".format(' '.join([MY_NAME,'help']))
+            cmd_pattern = "^{}.*".format(' '.join([my_name, command.lower()]))
+            help_pattern = "^{}.*".format(' '.join([my_name,'help']))
 
             result = re.search(help_pattern, message['text'].lower())
             if result:
@@ -46,7 +46,7 @@ def command(command, help=None):
             result = re.search(cmd_pattern, message['text'].lower())
             if result:
                 msg = dict(message)
-                msg['text'] = re.sub("^{}".format(MY_NAME), '', msg['text']).strip()
+                msg['text'] = re.sub("^{}".format(my_name), '', msg['text']).strip()
                 func(msg)
             else:
                 pass
@@ -61,7 +61,7 @@ def mentioned(func):
     :return:
     """
     def func_wrapper(message):
-        if MY_NAME.lower() in message['text'].lower():
+        if my_name.lower() in message['text'].lower():
             func(message)
         else:
             pass
