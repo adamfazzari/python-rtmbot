@@ -2,9 +2,9 @@ from slackclient import SlackClient
 import json
 import os
 
+
 # instance of API client that can be accessed from other files
 api_client = None
-
 
 # create an instance of the api client and initialize it with a token
 def init(token):
@@ -18,7 +18,21 @@ def slack_token():
 
 # get_users() returns a list of users in a Slack organization
 def get_users():
-    return json.loads(api_client.api_call('users.list'))['members']
+    return api_client.api_call('users.list')['members']
+
+def get_users_full_name(user_id):
+    """
+        Return the first name of the user with user_id
+        :param user_id: slack user id
+        :return: The user's first name, otherwise blank string if id can't be found
+        """
+    l = get_users()
+    user = [u for u in l if u['id'] == user_id]
+    if user:
+        real_name = user[0]['profile']['real_name']
+        return real_name
+
+    return ''
 
 def get_users_first_name(user_id):
     """
@@ -43,6 +57,12 @@ def get_channel_id(channel_name):
         return cl[0]['id']
     return ''
 
+def get_channel_name(channel_id):
+    cl = get_channels()
+    cl = [c for c in cl if c['id'] == channel_id]
+    if cl:
+        return cl[0]['name']
+    return ''
 
 # get_presence returns if a certain user is active or not in chat
 def get_presence(id):
