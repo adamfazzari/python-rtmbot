@@ -48,7 +48,7 @@ def command(command, help=None):
             result = re.search(cmd_pattern, message['text'].lower())
             if result:
                 msg = dict(message)
-                msg['text'] = re.sub("^{}".format(my_name), '', msg['text']).strip()
+                msg['text'] = re.sub("^{}".format(my_name.lower()), '', msg['text'].lower()).strip()
                 func(msg)
             else:
                 pass
