@@ -38,6 +38,8 @@ def command(command, help=None):
             cmd_pattern = "^{}.*".format(' '.join([my_name, command.lower()]))
             help_pattern = "^{}.*".format(' '.join([my_name,'help']))
 
+            if 'text' not in message:
+                message['text'] = message.get('attachments', [{}])[0].get('pretext', '')
             result = re.search(help_pattern, message['text'].lower())
             if result:
                 help_message(message['channel'], command, help)
